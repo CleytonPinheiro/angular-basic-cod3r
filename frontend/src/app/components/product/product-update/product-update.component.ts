@@ -1,15 +1,39 @@
-import { Component, OnInit } from '@angular/core';
+import { Product } from "./../product.model";
+import { ActivatedRoute, Router } from "@angular/router";
+import { ProductService } from "./../product.service";
+import { Component, OnInit } from "@angular/core";
 
 @Component({
-  selector: 'app-product-update',
-  templateUrl: './product-update.component.html',
-  styleUrls: ['./product-update.component.css']
+  selector: "app-product-update",
+  templateUrl: "./product-update.component.html",
+  styleUrls: ["./product-update.component.css"],
 })
 export class ProductUpdateComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit(): void {
+  product: any;
+  constructor(
+    private ProductService: ProductService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {
+    this.product = [];
   }
 
+  ngOnInit(): void {
+    // Pegando o parametro pela rota, usando a chave id
+    const id = this.route.snapshot.paramMap.get("id");
+    this.ProductService.readById("id").subscribe((product) => {
+      this.product = product;
+    });
+  }
+
+  updateProduct(): void {
+    this.ProductService.update(this.product).subscribe(() => {
+      this.ProductService.showMessage("Produto atualizado com sucesso!");
+      this.router.navigate(["/products"]);
+    });
+  }
+
+  cancel(): void {
+    this.router.navigate(["/products"]);
+  }
 }
