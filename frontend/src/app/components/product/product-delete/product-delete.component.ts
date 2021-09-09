@@ -10,6 +10,7 @@ import { Component, OnInit } from "@angular/core";
 })
 export class ProductDeleteComponent implements OnInit {
   product: any;
+
   constructor(
     private productService: ProductService,
     private router: Router,
